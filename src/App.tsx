@@ -36,7 +36,7 @@ function App() {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-base-100 via-base-200 to-base-100"
+      className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50"
       data-testid="app"
     >
       <Header />
@@ -55,23 +55,21 @@ function App() {
 
           {/* 右カラム: チーム設定 */}
           <div className="space-y-6">
-            <div className="card border border-base-300 bg-gradient-to-br from-base-100 to-base-200 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title flex items-center gap-2">
-                  <Sparkles size={24} className="text-accent" />
-                  チーム設定
-                </h2>
-                <TeamConfig
-                  totalTeams={config.totalTeams}
-                  onUpdate={(totalTeams) => updateConfig({ totalTeams })}
-                />
-                <div className="divider divider-accent">制約ルール</div>
-                <PatternRuleList
-                  rules={config.rules}
-                  onAdd={addPatternRule}
-                  onRemove={removePatternRule}
-                />
-              </div>
+            <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl">
+              <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+                <Sparkles size={24} className="text-cyan-500" />
+                チーム設定
+              </h2>
+              <TeamConfig
+                totalTeams={config.totalTeams}
+                onUpdate={(totalTeams) => updateConfig({ totalTeams })}
+              />
+              <div className="my-6 border-t border-cyan-200"></div>
+              <PatternRuleList
+                rules={config.rules}
+                onAdd={addPatternRule}
+                onRemove={removePatternRule}
+              />
             </div>
 
             {/* バリデーションメッセージ */}
@@ -82,7 +80,7 @@ function App() {
 
             {/* チーム作成ボタン */}
             <button
-              className="btn btn-primary btn-lg w-full gap-2 shadow-lg transition-all hover:shadow-xl"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300"
               onClick={handleCreateTeams}
               disabled={!validation.isValid || isLoading}
               data-testid="create-teams-button"
@@ -105,13 +103,14 @@ function App() {
             {error && (
               <div
                 role="alert"
-                className="alert alert-error animate-slide-in shadow-lg"
+                className="flex animate-slide-in items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 shadow-lg"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 shrink-0 stroke-current"
+                  className="h-6 w-6 shrink-0 text-red-600"
                   fill="none"
                   viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
                   <path
                     strokeLinecap="round"
@@ -120,7 +119,7 @@ function App() {
                     d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span>{error}</span>
+                <span className="text-red-800">{error}</span>
               </div>
             )}
           </div>
@@ -129,82 +128,77 @@ function App() {
         {/* チーム結果表示 */}
         {teams.length > 0 && (
           <div className="mt-12">
-            <div className="from-primary/10 to-secondary/10 hero mb-6 rounded-box bg-gradient-to-r">
-              <div className="hero-content py-8 text-center">
-                <div className="max-w-md">
-                  <Trophy size={48} className="mx-auto mb-4 text-primary" />
-                  <h2 className="mb-4 flex items-center justify-center gap-3 text-3xl font-bold">
-                    <Sparkles className="text-accent" />
-                    チーム分け結果
-                    <Sparkles className="text-accent" />
-                  </h2>
-                  <p className="text-base-content/70 mb-4">
-                    {teams.length}つのチームが作成されました
-                  </p>
-                  <button
-                    className="btn btn-outline btn-sm gap-2"
-                    onClick={clearTeams}
-                    data-testid="clear-teams-button"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                    結果をクリア
-                  </button>
-                </div>
-              </div>
+            <div className="mb-6 rounded-2xl bg-gradient-to-r from-primary-50 to-secondary-50 p-8 text-center">
+              <Trophy size={48} className="mx-auto mb-4 text-primary-500" />
+              <h2 className="mb-4 flex items-center justify-center gap-3 text-3xl font-bold">
+                <Sparkles className="text-cyan-500" />
+                チーム分け結果
+                <Sparkles className="text-cyan-500" />
+              </h2>
+              <p className="mb-4 text-gray-600">
+                {teams.length}つのチームが作成されました
+              </p>
+              <button
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm transition-colors hover:bg-gray-50"
+                onClick={clearTeams}
+                data-testid="clear-teams-button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                結果をクリア
+              </button>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {teams.map((team, index) => (
                 <div
                   key={team.id}
-                  className="hover-lift border-primary/20 card border-2 bg-gradient-to-br from-base-100 to-base-200 shadow-xl"
+                  className="hover-lift rounded-xl border-2 border-primary-200 bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl transition-transform"
                   data-testid={`team-card-${team.id}`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="card-body">
-                    <div className="mb-2 flex items-center justify-between">
-                      <h3 className="card-title text-2xl">{team.name}</h3>
-                      <div className="badge badge-primary badge-lg">
-                        {team.members.length}人
-                      </div>
+                  <div className="mb-2 flex items-center justify-between">
+                    <h3 className="text-2xl font-bold">{team.name}</h3>
+                    <div className="inline-flex items-center rounded-full bg-primary-500 px-3 py-1 text-sm font-semibold text-white">
+                      {team.members.length}人
                     </div>
-                    <div className="divider my-1"></div>
-                    <ul className="space-y-2">
-                      {team.members.map((member, idx) => (
-                        <li
-                          key={member.id}
-                          className="bg-base-200/50 hover:bg-base-300/50 flex items-center gap-3 rounded-lg p-2 transition-colors"
-                        >
-                          <div className="placeholder avatar">
-                            <div className="bg-neutral-focus w-8 rounded-full text-neutral-content">
-                              <span className="text-xs">{idx + 1}</span>
-                            </div>
-                          </div>
-                          <span className="flex-1 font-medium">
-                            {member.name}
-                          </span>
-                          <span
-                            className={`badge ${member.group === 'NAiS' ? 'badge-primary' : 'badge-secondary'}`}
-                          >
-                            {member.group === 'NAiS' ? '🚀' : '🎯'}{' '}
-                            {member.group}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
+                  <div className="my-3 border-t border-gray-200"></div>
+                  <ul className="space-y-2">
+                    {team.members.map((member, idx) => (
+                      <li
+                        key={member.id}
+                        className="flex items-center gap-3 rounded-lg bg-gray-100/50 p-2 transition-colors hover:bg-gray-200/50"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-xs text-white">
+                          {idx + 1}
+                        </div>
+                        <span className="flex-1 font-medium">
+                          {member.name}
+                        </span>
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${
+                            member.group === 'NAiS'
+                              ? 'bg-primary-500 text-white'
+                              : 'bg-secondary-500 text-white'
+                          }`}
+                        >
+                          {member.group === 'NAiS' ? '🚀' : '🎯'} {member.group}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>

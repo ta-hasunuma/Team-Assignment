@@ -48,10 +48,12 @@ export function PatternRuleList({
   return (
     <div className="animate-fade-in space-y-4" data-testid="pattern-rule-list">
       <div className="flex items-center gap-2">
-        <Target size={20} className="text-accent" />
+        <Target size={20} className="text-cyan-500" />
         <h3 className="font-semibold">パターン制約</h3>
         {rules.length > 0 && (
-          <span className="badge badge-accent badge-sm">{rules.length}</span>
+          <span className="inline-flex items-center rounded-full bg-cyan-100 px-2 py-0.5 text-xs text-cyan-700">
+            {rules.length}
+          </span>
         )}
       </div>
 
@@ -61,30 +63,32 @@ export function PatternRuleList({
           {rules.map((rule, index) => {
             const typeColor =
               rule.type === 'NAiS_ONLY'
-                ? 'badge-primary'
+                ? 'bg-primary-100 text-primary-700'
                 : rule.type === 'KAG_ONLY'
-                  ? 'badge-secondary'
-                  : 'badge-accent';
+                  ? 'bg-secondary-100 text-secondary-700'
+                  : 'bg-cyan-100 text-cyan-700';
             return (
               <div
                 key={rule.id}
-                className="alert shadow-sm transition-all hover:shadow-md"
+                className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
                 style={{ animationDelay: `${index * 50}ms` }}
                 data-testid={`rule-item-${rule.id}`}
               >
-                <Layers size={20} />
+                <Layers size={20} className="text-gray-600" />
                 <div className="flex-1">
                   <div className="mb-1 flex items-center gap-2">
-                    <span className={`badge ${typeColor} badge-sm`}>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${typeColor}`}
+                    >
                       {getTypeLabel(rule.type)}
                     </span>
                   </div>
-                  <div className="text-base-content/70 text-sm">
+                  <div className="text-sm text-gray-600">
                     {rule.teamCount}チーム × {rule.membersPerTeam}名
                   </div>
                 </div>
                 <button
-                  className="btn btn-ghost btn-sm btn-circle hover:btn-error"
+                  className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-red-100 hover:text-red-600"
                   onClick={() => onRemove(rule.id)}
                   aria-label="ルールを削除"
                   data-testid={`remove-rule-${rule.id}`}
@@ -98,35 +102,49 @@ export function PatternRuleList({
       )}
 
       {/* ルール追加フォーム */}
-      <div className="collapse collapse-arrow bg-base-200 shadow-sm">
-        <input type="checkbox" defaultChecked />
-        <div className="collapse-title flex items-center gap-2 font-medium">
+      <details className="rounded-lg bg-gray-50 shadow-sm" open>
+        <summary className="flex cursor-pointer items-center gap-2 p-4 font-medium">
           <Plus size={18} />
           新しいルールを追加
-        </div>
-        <div className="collapse-content space-y-4">
-          <div className="form-control">
-            <label className="label" htmlFor="rule-type">
-              <span className="label-text font-semibold">チームタイプ</span>
+        </summary>
+        <div className="space-y-4 p-4 pt-0">
+          <div>
+            <label
+              className="mb-2 block text-sm font-semibold"
+              htmlFor="rule-type"
+            >
+              チームタイプ
             </label>
-            <div className="w-full join" data-testid="rule-type-select">
+            <div className="flex w-full gap-2" data-testid="rule-type-select">
               <button
                 type="button"
-                className={`btn flex-1 join-item ${type === 'NAiS_ONLY' ? 'btn-primary' : 'btn-outline'}`}
+                className={`flex-1 rounded-lg px-4 py-2 font-medium transition-colors ${
+                  type === 'NAiS_ONLY'
+                    ? 'bg-primary-500 text-white'
+                    : 'border border-gray-300 bg-white hover:bg-gray-50'
+                }`}
                 onClick={() => setType('NAiS_ONLY')}
               >
                 🚀 NAiSのみ
               </button>
               <button
                 type="button"
-                className={`btn flex-1 join-item ${type === 'KAG_ONLY' ? 'btn-secondary' : 'btn-outline'}`}
+                className={`flex-1 rounded-lg px-4 py-2 font-medium transition-colors ${
+                  type === 'KAG_ONLY'
+                    ? 'bg-secondary-500 text-white'
+                    : 'border border-gray-300 bg-white hover:bg-gray-50'
+                }`}
                 onClick={() => setType('KAG_ONLY')}
               >
                 🎯 KAGのみ
               </button>
               <button
                 type="button"
-                className={`btn flex-1 join-item ${type === 'MIXED' ? 'btn-accent' : 'btn-outline'}`}
+                className={`flex-1 rounded-lg px-4 py-2 font-medium transition-colors ${
+                  type === 'MIXED'
+                    ? 'bg-cyan-500 text-white'
+                    : 'border border-gray-300 bg-white hover:bg-gray-50'
+                }`}
                 onClick={() => setType('MIXED')}
               >
                 ⚡ 混合
@@ -135,10 +153,13 @@ export function PatternRuleList({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="label" htmlFor="rule-team-count">
-                <span className="label-text font-semibold">チーム数</span>
-                <span className="label-text-alt badge badge-sm">
+            <div>
+              <label
+                className="mb-2 flex items-center justify-between text-sm font-semibold"
+                htmlFor="rule-team-count"
+              >
+                <span>チーム数</span>
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs">
                   {teamCount}
                 </span>
               </label>
@@ -147,24 +168,27 @@ export function PatternRuleList({
                 type="range"
                 min="1"
                 max="10"
-                className="range range-primary range-sm"
+                className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-primary-500"
                 value={teamCount}
                 onInput={(e) =>
                   setTeamCount(parseInt(e.currentTarget.value, 10))
                 }
                 data-testid="rule-team-count-input"
               />
-              <div className="mt-1 flex w-full justify-between px-2 text-xs">
+              <div className="mt-1 flex w-full justify-between px-2 text-xs text-gray-500">
                 <span>1</span>
                 <span>5</span>
                 <span>10</span>
               </div>
             </div>
 
-            <div className="form-control">
-              <label className="label" htmlFor="rule-members-per-team">
-                <span className="label-text font-semibold">1チームの人数</span>
-                <span className="label-text-alt badge badge-sm">
+            <div>
+              <label
+                className="mb-2 flex items-center justify-between text-sm font-semibold"
+                htmlFor="rule-members-per-team"
+              >
+                <span>1チームの人数</span>
+                <span className="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs">
                   {membersPerTeam}
                 </span>
               </label>
@@ -173,14 +197,14 @@ export function PatternRuleList({
                 type="range"
                 min="1"
                 max="10"
-                className="range range-secondary range-sm"
+                className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-secondary-500"
                 value={membersPerTeam}
                 onInput={(e) =>
                   setMembersPerTeam(parseInt(e.currentTarget.value, 10))
                 }
                 data-testid="rule-members-per-team-input"
               />
-              <div className="mt-1 flex w-full justify-between px-2 text-xs">
+              <div className="mt-1 flex w-full justify-between px-2 text-xs text-gray-500">
                 <span>1</span>
                 <span>5</span>
                 <span>10</span>
@@ -189,7 +213,7 @@ export function PatternRuleList({
           </div>
 
           <button
-            className="btn btn-accent w-full gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2 text-white transition-colors hover:bg-cyan-600"
             onClick={handleAdd}
             data-testid="add-rule-button"
           >
@@ -197,7 +221,7 @@ export function PatternRuleList({
             ルールを追加
           </button>
         </div>
-      </div>
+      </details>
     </div>
   );
 }

@@ -32,72 +32,73 @@ export function MemberInput({ onAdd }: MemberInputProps) {
 
   return (
     <div
-      className="card-appear card border border-base-300 bg-gradient-to-br from-base-100 to-base-200 shadow-xl"
+      className="card-appear rounded-xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl"
       data-testid="member-input"
     >
-      <div className="card-body">
-        <h2 className="card-title flex items-center gap-2">
-          <UserPlus size={24} className="text-primary" />
-          メンバー追加
-        </h2>
+      <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+        <UserPlus size={24} className="text-primary-500" />
+        メンバー追加
+      </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="form-control">
-            <label className="label" htmlFor="member-name">
-              <span className="label-text font-semibold">名前</span>
-            </label>
-            <div className="w-full join">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label
+            className="mb-2 block text-sm font-semibold text-gray-700"
+            htmlFor="member-name"
+          >
+            名前
+          </label>
+          <div className="flex w-full gap-2">
+            <input
+              id="member-name"
+              type="text"
+              placeholder="メンバー名を入力"
+              className="flex-1 rounded-l-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              data-testid="name-input"
+            />
+            <button
+              type="submit"
+              className="rounded-r-lg bg-primary-500 px-6 py-2 text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+              disabled={name.trim() === ''}
+              data-testid="add-button"
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-semibold text-gray-700">
+            グループ
+          </label>
+          <div className="flex gap-4" data-testid="group-select">
+            <label className="flex flex-1 cursor-pointer items-center gap-2">
               <input
-                id="member-name"
-                type="text"
-                placeholder="メンバー名を入力"
-                className="input-bordered input w-full join-item focus:outline-offset-0"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                data-testid="name-input"
+                type="radio"
+                name="group"
+                className="h-4 w-4 text-primary-500 focus:ring-2 focus:ring-primary-200"
+                value="NAiS"
+                checked={group === 'NAiS'}
+                onChange={(e) => setGroup(e.target.value as MemberGroup)}
               />
-              <button
-                type="submit"
-                className="btn btn-primary join-item"
-                disabled={name.trim() === ''}
-                data-testid="add-button"
-              >
-                <Plus size={20} />
-              </button>
-            </div>
-          </div>
-
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">グループ</span>
+              <span className="font-medium">NAiS</span>
             </label>
-            <div className="flex gap-4" data-testid="group-select">
-              <label className="label flex-1 cursor-pointer gap-2">
-                <input
-                  type="radio"
-                  name="group"
-                  className="radio radio-primary"
-                  value="NAiS"
-                  checked={group === 'NAiS'}
-                  onChange={(e) => setGroup(e.target.value as MemberGroup)}
-                />
-                <span className="label-text font-medium">NAiS</span>
-              </label>
-              <label className="label flex-1 cursor-pointer gap-2">
-                <input
-                  type="radio"
-                  name="group"
-                  className="radio radio-secondary"
-                  value="KAG"
-                  checked={group === 'KAG'}
-                  onChange={(e) => setGroup(e.target.value as MemberGroup)}
-                />
-                <span className="label-text font-medium">KAG</span>
-              </label>
-            </div>
+            <label className="flex flex-1 cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="group"
+                className="h-4 w-4 text-secondary-500 focus:ring-2 focus:ring-secondary-200"
+                value="KAG"
+                checked={group === 'KAG'}
+                onChange={(e) => setGroup(e.target.value as MemberGroup)}
+              />
+              <span className="font-medium">KAG</span>
+            </label>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 }

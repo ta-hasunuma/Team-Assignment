@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, UserPlus } from 'lucide-react';
+import { Plus, UserPlus, ChevronDown } from 'lucide-react';
 import type { Member, MemberGroup } from '@/types';
 
 interface MemberInputProps {
@@ -12,6 +12,7 @@ interface MemberInputProps {
 export function MemberInput({ onAdd }: MemberInputProps) {
   const [name, setName] = useState('');
   const [group, setGroup] = useState<MemberGroup>('NAiS');
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,16 +32,24 @@ export function MemberInput({ onAdd }: MemberInputProps) {
   };
 
   return (
-    <div
-      className="card-appear rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+    <details
+      className="card-appear rounded-lg border border-gray-200 bg-white shadow-sm"
       data-testid="member-input"
+      open={isOpen}
+      onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
     >
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-600">
-        <UserPlus size={18} className="text-gray-400" />
-        メンバー追加
-      </h2>
+      <summary className="flex cursor-pointer items-center justify-between p-3 text-sm font-semibold text-gray-600 hover:bg-gray-50">
+        <div className="flex items-center gap-2">
+          <UserPlus size={18} className="text-gray-400" />
+          メンバー追加
+        </div>
+        <ChevronDown
+          size={18}
+          className={`text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </summary>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-3 p-4 pt-0">
         <div className="flex w-full gap-2">
           <input
             id="member-name"
@@ -86,6 +95,6 @@ export function MemberInput({ onAdd }: MemberInputProps) {
           </label>
         </div>
       </form>
-    </div>
+    </details>
   );
 }

@@ -211,7 +211,7 @@ function App() {
               {teams.map((team, index) => (
                 <div
                   key={team.id}
-                  className="hover-lift rounded-xl border-2 border-primary-200 bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl transition-transform"
+                  className="hover-lift rounded-xl border-2 border-primary-200 bg-gradient-to-br from-white to-gray-50 p-6 transition-transform"
                   data-testid={`team-card-${team.id}`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >

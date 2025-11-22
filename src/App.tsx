@@ -8,6 +8,7 @@ import { Loading } from '@/components/common/Loading';
 import { useTeamStore } from '@/store/teamStore';
 import { useValidation } from '@/hooks/useValidation';
 import { Users, Sparkles, Trophy } from 'lucide-react';
+import { useRef, useEffect } from 'react';
 
 function App() {
   const {
@@ -27,12 +28,25 @@ function App() {
   } = useTeamStore();
 
   const validation = useValidation(members, config);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const handleCreateTeams = () => {
     if (validation.isValid) {
       createTeams();
     }
   };
+
+  // チーム作成後に結果へ自動スクロール
+  useEffect(() => {
+    if (teams.length > 0 && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
+    }
+  }, [teams.length]);
 
   return (
     <div
@@ -99,6 +113,36 @@ function App() {
               )}
             </button>
 
+            {/* 結果へのスクロールインジケーター */}
+            {teams.length > 0 && (
+              <button
+                onClick={() =>
+                  resultsRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  })
+                }
+                className="flex w-full animate-bounce-soft items-center justify-center gap-2 rounded-lg border-2 border-primary-300 bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700 transition-all hover:bg-primary-100"
+              >
+                <Trophy size={18} />
+                チーム結果を見る
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 animate-bounce"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+            )}
+
             {/* エラー表示 */}
             {error && (
               <div
@@ -127,9 +171,12 @@ function App() {
 
         {/* チーム結果表示 */}
         {teams.length > 0 && (
-          <div className="mt-12">
-            <div className="mb-6 rounded-2xl bg-gradient-to-r from-primary-50 to-secondary-50 p-8 text-center">
-              <Trophy size={48} className="mx-auto mb-4 text-primary-500" />
+          <div ref={resultsRef} className="mt-12 scroll-mt-20">
+            <div className="mb-6 rounded-2xl bg-gradient-to-r from-primary-50 to-secondary-50 p-8 text-center shadow-lg">
+              <Trophy
+                size={48}
+                className="mx-auto mb-4 animate-bounce-soft text-primary-500"
+              />
               <h2 className="mb-4 flex items-center justify-center gap-3 text-3xl font-bold">
                 <Sparkles className="text-cyan-500" />
                 チーム分け結果

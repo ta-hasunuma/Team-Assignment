@@ -172,7 +172,7 @@ function App() {
         {/* チーム結果表示 */}
         {teams.length > 0 && (
           <div ref={resultsRef} className="mt-12 scroll-mt-20">
-            <div className="mb-6 rounded-2xl bg-gradient-to-r from-primary-50 to-secondary-50 p-8 text-center shadow-lg">
+            <div className="mb-6 rounded-2xl bg-gradient-to-r from-primary-50 to-secondary-50 p-8 text-center">
               <Trophy
                 size={48}
                 className="mx-auto mb-4 animate-bounce-soft text-primary-500"

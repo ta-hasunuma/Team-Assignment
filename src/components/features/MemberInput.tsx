@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, UserPlus } from 'lucide-react';
 import type { Member, MemberGroup } from '@/types';
 
 interface MemberInputProps {
@@ -32,53 +32,70 @@ export function MemberInput({ onAdd }: MemberInputProps) {
 
   return (
     <div
-      className="card bg-base-100 card-appear shadow-xl"
+      className="card-appear card border border-base-300 bg-gradient-to-br from-base-100 to-base-200 shadow-xl"
       data-testid="member-input"
     >
       <div className="card-body">
-        <h2 className="card-title">メンバー追加</h2>
+        <h2 className="card-title flex items-center gap-2">
+          <UserPlus size={24} className="text-primary" />
+          メンバー追加
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-control">
             <label className="label" htmlFor="member-name">
-              <span className="label-text">名前</span>
+              <span className="label-text font-semibold">名前</span>
             </label>
-            <input
-              id="member-name"
-              type="text"
-              placeholder="メンバー名を入力"
-              className="input input-bordered focus:ring-primary focus:ring-opacity-50 w-full transition-all focus:ring"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              data-testid="name-input"
-            />
+            <div className="w-full join">
+              <input
+                id="member-name"
+                type="text"
+                placeholder="メンバー名を入力"
+                className="input-bordered input w-full join-item focus:outline-offset-0"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                data-testid="name-input"
+              />
+              <button
+                type="submit"
+                className="btn btn-primary join-item"
+                disabled={name.trim() === ''}
+                data-testid="add-button"
+              >
+                <Plus size={20} />
+              </button>
+            </div>
           </div>
 
           <div className="form-control">
-            <label className="label" htmlFor="member-group">
-              <span className="label-text">グループ</span>
+            <label className="label">
+              <span className="label-text font-semibold">グループ</span>
             </label>
-            <select
-              id="member-group"
-              className="select select-bordered focus:ring-primary focus:ring-opacity-50 w-full transition-all focus:ring"
-              value={group}
-              onChange={(e) => setGroup(e.target.value as MemberGroup)}
-              data-testid="group-select"
-            >
-              <option value="NAiS">NAiS</option>
-              <option value="KAG">KAG</option>
-            </select>
+            <div className="flex gap-4" data-testid="group-select">
+              <label className="label flex-1 cursor-pointer gap-2">
+                <input
+                  type="radio"
+                  name="group"
+                  className="radio radio-primary"
+                  value="NAiS"
+                  checked={group === 'NAiS'}
+                  onChange={(e) => setGroup(e.target.value as MemberGroup)}
+                />
+                <span className="label-text font-medium">NAiS</span>
+              </label>
+              <label className="label flex-1 cursor-pointer gap-2">
+                <input
+                  type="radio"
+                  name="group"
+                  className="radio radio-secondary"
+                  value="KAG"
+                  checked={group === 'KAG'}
+                  onChange={(e) => setGroup(e.target.value as MemberGroup)}
+                />
+                <span className="label-text font-medium">KAG</span>
+              </label>
+            </div>
           </div>
-
-          <button
-            type="submit"
-            className="btn btn-primary btn-hover-effect w-full"
-            disabled={name.trim() === ''}
-            data-testid="add-button"
-          >
-            <Plus size={20} />
-            追加
-          </button>
         </form>
       </div>
     </div>

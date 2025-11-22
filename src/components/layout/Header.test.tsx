@@ -13,13 +13,13 @@ describe('Header', () => {
   it('アプリケーションタイトルが表示される', () => {
     render(<Header />);
 
-    expect(screen.getByText('Team Divider for NAiS')).toBeInTheDocument();
+    expect(screen.getByText('Team Divider')).toBeInTheDocument();
   });
 
   it('タイトルがh1タグである', () => {
     render(<Header />);
 
     const title = screen.getByRole('heading', { level: 1 });
-    expect(title).toHaveTextContent('Team Divider for NAiS');
+    expect(title).toHaveTextContent('Team Divider');
   });
 });

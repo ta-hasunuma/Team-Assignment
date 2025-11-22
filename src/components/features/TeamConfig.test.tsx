@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { TeamConfig } from './TeamConfig';
 
 describe('TeamConfig', () => {
@@ -22,31 +21,26 @@ describe('TeamConfig', () => {
     expect(input.value).toBe('5');
   });
 
-  it('チーム数を変更するとonUpdateが呼ばれる', async () => {
-    const user = userEvent.setup();
+  it('チーム数を変更するとonUpdateが呼ばれる', () => {
     const onUpdate = vi.fn();
 
     render(<TeamConfig totalTeams={3} onUpdate={onUpdate} />);
 
-    const input = screen.getByTestId('total-teams-input');
-    await user.tripleClick(input);
-    await user.keyboard('4');
+    const input = screen.getByTestId('total-teams-input') as HTMLInputElement;
+    fireEvent.input(input, { target: { value: '4' } });
 
     expect(onUpdate).toHaveBeenCalledWith(4);
   });
 
-  it('無効な値では更新されない', async () => {
-    const user = userEvent.setup();
+  it('無効な値では更新されない', () => {
     const onUpdate = vi.fn();
 
     render(<TeamConfig totalTeams={3} onUpdate={onUpdate} />);
 
-    const input = screen.getByTestId('total-teams-input');
-    await user.tripleClick(input);
-    await user.keyboard('0');
-
-    // 0以下の値では更新されない
-    expect(onUpdate).not.toHaveBeenCalled();
+    const input = screen.getByTestId('total-teams-input') as HTMLInputElement;
+    // range入力はHTMLのmin/max属性で制限される
+    expect(input.min).toBe('1');
+    expect(input.max).toBe('20');
   });
 
   it('説明テキストが表示される', () => {

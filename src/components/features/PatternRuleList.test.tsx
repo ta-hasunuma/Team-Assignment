@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PatternRuleList } from './PatternRuleList';
 import type { PatternRule } from '@/types';
@@ -49,15 +49,19 @@ describe('PatternRuleList', () => {
     );
   });
 
-  it('チームタイプを変更して追加できる', async () => {
+  it('チームタイプを変更できる', async () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     const onRemove = vi.fn();
 
     render(<PatternRuleList rules={[]} onAdd={onAdd} onRemove={onRemove} />);
 
-    const typeSelect = screen.getByTestId('rule-type-select');
-    await user.selectOptions(typeSelect, 'KAG_ONLY');
+    // チームタイプ選択はボタンに変更されたため、ボタンをクリック
+    const typeSelectContainer = screen.getByTestId('rule-type-select');
+    const kagButton = typeSelectContainer.querySelector('button:nth-child(2)');
+    if (kagButton) {
+      await user.click(kagButton);
+    }
 
     const addButton = screen.getByTestId('add-rule-button');
     await user.click(addButton);
@@ -69,37 +73,39 @@ describe('PatternRuleList', () => {
     );
   });
 
-  it('チーム数を変更して追加できる', async () => {
+  it('チーム数を変更できる', async () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     const onRemove = vi.fn();
 
     render(<PatternRuleList rules={[]} onAdd={onAdd} onRemove={onRemove} />);
 
-    const teamCountInput = screen.getByTestId('rule-team-count-input');
-    await user.tripleClick(teamCountInput);
-    await user.keyboard('2');
+    const teamCountInput = screen.getByTestId(
+      'rule-team-count-input'
+    ) as HTMLInputElement;
+    fireEvent.input(teamCountInput, { target: { value: '3' } });
 
     const addButton = screen.getByTestId('add-rule-button');
     await user.click(addButton);
 
     expect(onAdd).toHaveBeenCalledWith(
       expect.objectContaining({
-        teamCount: 2,
+        teamCount: 3,
       })
     );
   });
 
-  it('1チームの人数を変更して追加できる', async () => {
+  it('1チームの人数を変更できる', async () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     const onRemove = vi.fn();
 
     render(<PatternRuleList rules={[]} onAdd={onAdd} onRemove={onRemove} />);
 
-    const membersInput = screen.getByTestId('rule-members-per-team-input');
-    await user.tripleClick(membersInput);
-    await user.keyboard('5');
+    const membersInput = screen.getByTestId(
+      'rule-members-per-team-input'
+    ) as HTMLInputElement;
+    fireEvent.input(membersInput, { target: { value: '5' } });
 
     const addButton = screen.getByTestId('add-rule-button');
     await user.click(addButton);

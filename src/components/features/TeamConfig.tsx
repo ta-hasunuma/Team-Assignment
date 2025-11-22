@@ -1,3 +1,5 @@
+import { Users } from 'lucide-react';
+
 interface TeamConfigProps {
   totalTeams: number;
   onUpdate: (totalTeams: number) => void;
@@ -17,20 +19,33 @@ export function TeamConfig({ totalTeams, onUpdate }: TeamConfigProps) {
   return (
     <div className="form-control animate-fade-in" data-testid="team-config">
       <label className="label" htmlFor="total-teams">
-        <span className="label-text font-semibold">全体のWIP数</span>
+        <span className="label-text flex items-center gap-2 font-semibold">
+          <Users size={18} className="text-primary" />
+          全体のWIP数
+        </span>
+        <span className="label-text-alt badge badge-primary badge-lg font-bold">
+          {totalTeams}
+        </span>
       </label>
       <input
         id="total-teams"
-        type="number"
+        type="range"
         min="1"
         max="20"
-        className="input input-bordered focus:ring-primary focus:ring-opacity-50 transition-all focus:ring"
+        className="range range-primary"
         value={totalTeams}
-        onChange={handleChange}
+        onInput={handleChange}
         data-testid="total-teams-input"
       />
+      <div className="mt-2 flex w-full justify-between px-2 text-xs">
+        <span>1</span>
+        <span>5</span>
+        <span>10</span>
+        <span>15</span>
+        <span>20</span>
+      </div>
       <label className="label">
-        <span className="label-text-alt">
+        <span className="label-text-alt text-base-content/70">
           作成するチーム数を指定してください
         </span>
       </label>

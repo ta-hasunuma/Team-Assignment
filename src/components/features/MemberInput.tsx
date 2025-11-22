@@ -31,7 +31,10 @@ export function MemberInput({ onAdd }: MemberInputProps) {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl" data-testid="member-input">
+    <div
+      className="card bg-base-100 card-appear shadow-xl"
+      data-testid="member-input"
+    >
       <div className="card-body">
         <h2 className="card-title">メンバー追加</h2>
 
@@ -44,7 +47,7 @@ export function MemberInput({ onAdd }: MemberInputProps) {
               id="member-name"
               type="text"
               placeholder="メンバー名を入力"
-              className="input input-bordered w-full"
+              className="input input-bordered focus:ring-primary focus:ring-opacity-50 w-full transition-all focus:ring"
               value={name}
               onChange={(e) => setName(e.target.value)}
               data-testid="name-input"
@@ -57,7 +60,7 @@ export function MemberInput({ onAdd }: MemberInputProps) {
             </label>
             <select
               id="member-group"
-              className="select select-bordered w-full"
+              className="select select-bordered focus:ring-primary focus:ring-opacity-50 w-full transition-all focus:ring"
               value={group}
               onChange={(e) => setGroup(e.target.value as MemberGroup)}
               data-testid="group-select"
@@ -69,7 +72,7 @@ export function MemberInput({ onAdd }: MemberInputProps) {
 
           <button
             type="submit"
-            className="btn btn-primary w-full"
+            className="btn btn-primary btn-hover-effect w-full"
             disabled={name.trim() === ''}
             data-testid="add-button"
           >

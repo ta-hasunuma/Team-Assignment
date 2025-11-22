@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* グローバルスタイル */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+/* カスタムコンポーネントスタイル */
+@layer components {
+  /* ホバーエフェクト */
+  .hover-lift {
+    @apply transition-transform duration-200 ease-in-out;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+
+  /* カードアニメーション */
+  .card-appear {
+    @apply animate-scale-in;
+  }
+
+  /* ボタンホバー */
+  .btn-hover-effect {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  .btn-hover-effect:hover:not(:disabled) {
+    @apply scale-105 shadow-md;
+  }
+
+  /* フェードイン効果 */
+  .fade-in-section {
+    @apply animate-fade-in;
+  }
+
+  /* スライドイン効果 */
+  .slide-in-section {
+    @apply animate-slide-in;
+  }
+
+  /* スムーズスクロール */
+  html {
+    @apply scroll-smooth;
+  }
+
+  /* フォーカススタイル */
+  .focus-ring {
+    @apply focus:ring-primary focus:ring-2 focus:ring-offset-2 focus:outline-none;
+  }
+}

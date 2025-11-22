@@ -46,16 +46,17 @@ export function PatternRuleList({
   };
 
   return (
-    <div className="space-y-4" data-testid="pattern-rule-list">
+    <div className="animate-fade-in space-y-4" data-testid="pattern-rule-list">
       <h3 className="font-semibold">パターン制約</h3>
 
       {/* 既存ルール一覧 */}
       {rules.length > 0 && (
         <div className="space-y-2">
-          {rules.map((rule) => (
+          {rules.map((rule, index) => (
             <div
               key={rule.id}
-              className="bg-base-200 flex items-center justify-between rounded-lg p-3"
+              className="bg-base-200 hover-lift flex items-center justify-between rounded-lg p-3 transition-all"
+              style={{ animationDelay: `${index * 50}ms` }}
               data-testid={`rule-item-${rule.id}`}
             >
               <div className="text-sm">
@@ -65,7 +66,7 @@ export function PatternRuleList({
                 </span>
               </div>
               <button
-                className="btn btn-sm btn-circle btn-ghost"
+                className="btn btn-sm btn-circle btn-ghost btn-hover-effect"
                 onClick={() => onRemove(rule.id)}
                 aria-label="ルールを削除"
                 data-testid={`remove-rule-${rule.id}`}
@@ -85,7 +86,7 @@ export function PatternRuleList({
           </label>
           <select
             id="rule-type"
-            className="select select-bordered select-sm"
+            className="select select-bordered select-sm focus:ring-primary focus:ring-opacity-50 transition-all focus:ring"
             value={type}
             onChange={(e) => setType(e.target.value as TeamType)}
             data-testid="rule-type-select"
@@ -106,7 +107,7 @@ export function PatternRuleList({
               type="number"
               min="1"
               max="10"
-              className="input input-bordered input-sm"
+              className="input input-bordered input-sm focus:ring-primary focus:ring-opacity-50 transition-all focus:ring"
               value={teamCount}
               onChange={(e) => setTeamCount(parseInt(e.target.value, 10) || 1)}
               data-testid="rule-team-count-input"
@@ -122,7 +123,7 @@ export function PatternRuleList({
               type="number"
               min="1"
               max="10"
-              className="input input-bordered input-sm"
+              className="input input-bordered input-sm focus:ring-primary focus:ring-opacity-50 transition-all focus:ring"
               value={membersPerTeam}
               onChange={(e) =>
                 setMembersPerTeam(parseInt(e.target.value, 10) || 1)
@@ -133,7 +134,7 @@ export function PatternRuleList({
         </div>
 
         <button
-          className="btn btn-sm btn-outline w-full"
+          className="btn btn-sm btn-outline btn-hover-effect w-full"
           onClick={handleAdd}
           data-testid="add-rule-button"
         >

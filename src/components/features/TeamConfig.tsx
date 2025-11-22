@@ -17,13 +17,16 @@ export function TeamConfig({ totalTeams, onUpdate }: TeamConfigProps) {
   };
 
   return (
-    <div className="form-control animate-fade-in" data-testid="team-config">
-      <label className="label" htmlFor="total-teams">
-        <span className="label-text flex items-center gap-2 font-semibold">
-          <Users size={18} className="text-primary" />
+    <div className="animate-fade-in" data-testid="team-config">
+      <label
+        className="mb-2 flex items-center justify-between"
+        htmlFor="total-teams"
+      >
+        <span className="flex items-center gap-2 font-semibold">
+          <Users size={18} className="text-primary-500" />
           全体のWIP数
         </span>
-        <span className="label-text-alt badge badge-primary badge-lg font-bold">
+        <span className="inline-flex items-center rounded-full bg-primary-500 px-3 py-1 text-sm font-bold text-white">
           {totalTeams}
         </span>
       </label>
@@ -32,23 +35,21 @@ export function TeamConfig({ totalTeams, onUpdate }: TeamConfigProps) {
         type="range"
         min="1"
         max="20"
-        className="range range-primary"
+        className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-primary-500"
         value={totalTeams}
         onInput={handleChange}
         data-testid="total-teams-input"
       />
-      <div className="mt-2 flex w-full justify-between px-2 text-xs">
+      <div className="mt-2 flex w-full justify-between px-2 text-xs text-gray-500">
         <span>1</span>
         <span>5</span>
         <span>10</span>
         <span>15</span>
         <span>20</span>
       </div>
-      <label className="label">
-        <span className="label-text-alt text-base-content/70">
-          作成するチーム数を指定してください
-        </span>
-      </label>
+      <p className="mt-2 text-sm text-gray-600">
+        作成するチーム数を指定してください
+      </p>
     </div>
   );
 }

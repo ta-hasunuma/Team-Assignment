@@ -75,11 +75,14 @@ describe('MemberInput', () => {
     render(<MemberInput onAdd={onAdd} />);
 
     const nameInput = screen.getByTestId('name-input');
-    const groupSelect = screen.getByTestId('group-select');
     const addButton = screen.getByTestId('add-button');
 
     await user.type(nameInput, 'KAG User');
-    await user.selectOptions(groupSelect, 'KAG');
+
+    // ラジオボタンでKAGを選択
+    const kagRadio = screen.getByRole('radio', { name: 'KAG' });
+    await user.click(kagRadio);
+
     await user.click(addButton);
 
     expect(onAdd).toHaveBeenCalledWith(

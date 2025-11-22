@@ -13,9 +13,10 @@ export function Badge({ group, className = '' }: BadgeProps) {
 
   return (
     <span
-      className={`badge ${colorClass} ${className} transition-transform hover:scale-105`}
+      className={`badge ${colorClass} badge-lg gap-1 ${className} font-semibold transition-transform hover:scale-110`}
       data-testid="badge"
     >
+      {group === 'NAiS' ? '🚀' : '🎯'}
       {group}
     </span>
   );

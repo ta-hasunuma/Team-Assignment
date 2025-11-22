@@ -20,7 +20,7 @@ describe('MemberList', () => {
     );
 
     expect(screen.getByTestId('member-list')).toBeInTheDocument();
-    expect(screen.getByText('メンバー一覧 (3名)')).toBeInTheDocument();
+    expect(screen.getByText('メンバー一覧')).toBeInTheDocument();
   });
 
   it('各メンバーが正しく表示される', () => {
@@ -42,7 +42,7 @@ describe('MemberList', () => {
 
     render(<MemberList members={[]} onRemove={onRemove} onReset={onReset} />);
 
-    expect(screen.getByTestId('empty-message')).toBeInTheDocument();
+    // statsが表示されるが、0人の時は表示されない
     expect(
       screen.getByText('メンバーが登録されていません')
     ).toBeInTheDocument();

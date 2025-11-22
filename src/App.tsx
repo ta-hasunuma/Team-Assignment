@@ -7,8 +7,9 @@ import { ValidationMessages } from '@/components/features/ValidationMessages';
 import { Loading } from '@/components/common/Loading';
 import { useTeamStore } from '@/store/teamStore';
 import { useValidation } from '@/hooks/useValidation';
-import { Users, Sparkles, Trophy } from 'lucide-react';
-import { useRef, useEffect } from 'react';
+import { Users, Sparkles, Trophy, Copy } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
+import * as htmlToImage from 'html-to-image';
 
 function App() {
   const {
@@ -29,6 +30,32 @@ function App() {
 
   const validation = useValidation(members, config);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const [copyingTeamId, setCopyingTeamId] = useState<string | null>(null);
+
+  const handleCopyTeamAsImage = async (teamId: string) => {
+    const teamElement = document.querySelector(
+      `[data-testid="team-card-${teamId}"]`
+    ) as HTMLElement;
+    if (!teamElement) return;
+
+    try {
+      setCopyingTeamId(teamId);
+      const dataUrl = await htmlToImage.toPng(teamElement, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+      });
+
+      const blob = await (await fetch(dataUrl)).blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob }),
+      ]);
+      setTimeout(() => setCopyingTeamId(null), 1000);
+    } catch (error) {
+      console.error('Failed to copy image:', error);
+      setCopyingTeamId(null);
+    }
+  };
 
   const handleCreateTeams = () => {
     if (validation.isValid) {
@@ -211,14 +238,53 @@ function App() {
               {teams.map((team, index) => (
                 <div
                   key={team.id}
-                  className="hover-lift rounded-xl border-2 border-primary-200 bg-gradient-to-br from-white to-gray-50 p-6 transition-transform"
+                  className="hover-lift relative rounded-xl border-2 border-primary-200 bg-gradient-to-br from-white to-gray-50 p-6 transition-transform"
                   data-testid={`team-card-${team.id}`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="mb-2 flex items-center justify-between">
                     <h3 className="text-2xl font-bold">{team.name}</h3>
-                    <div className="inline-flex items-center rounded-full bg-primary-500 px-3 py-1 text-sm font-semibold text-white">
-                      {team.members.length}人
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleCopyTeamAsImage(team.id)}
+                        className="flex items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200"
+                        title="画像としてコピー"
+                        data-testid={`copy-team-button-${team.id}`}
+                      >
+                        {copyingTeamId === team.id ? (
+                          <>
+                            <svg
+                              className="h-3 w-3 animate-spin"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            <span>コピー中</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={14} />
+                            <span>画像コピー</span>
+                          </>
+                        )}
+                      </button>
+                      <div className="inline-flex items-center rounded-full bg-primary-500 px-3 py-1 text-sm font-semibold text-white">
+                        {team.members.length}人
+                      </div>
                     </div>
                   </div>
                   <div className="my-3 border-t border-gray-200"></div>
@@ -235,13 +301,14 @@ function App() {
                           {member.name}
                         </span>
                         <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${
+                          className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-xs ${
                             member.group === 'NAiS'
                               ? 'bg-primary-500 text-white'
                               : 'bg-secondary-500 text-white'
                           }`}
                         >
-                          {member.group === 'NAiS' ? '🍺' : '📱'} {member.group}
+                          <span>{member.group === 'NAiS' ? '🍺' : '📱'}</span>
+                          <span>{member.group}</span>
                         </span>
                       </li>
                     ))}

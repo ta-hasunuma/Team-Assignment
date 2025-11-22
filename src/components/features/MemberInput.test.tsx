@@ -20,7 +20,7 @@ describe('MemberInput', () => {
 
     const nameInput = screen.getByTestId('name-input');
     expect(nameInput).toBeInTheDocument();
-    expect(nameInput).toHaveAttribute('placeholder', 'メンバー名を入力');
+    expect(nameInput).toHaveAttribute('placeholder', '名前を入力');
   });
 
   it('グループ選択欄が表示される', () => {

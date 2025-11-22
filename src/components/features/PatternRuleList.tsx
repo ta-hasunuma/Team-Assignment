@@ -125,7 +125,7 @@ export function PatternRuleList({
                 }`}
                 onClick={() => setType('NAiS_ONLY')}
               >
-                🚀 NAiSのみ
+                🍺 NAiSのみ
               </button>
               <button
                 type="button"
@@ -136,7 +136,7 @@ export function PatternRuleList({
                 }`}
                 onClick={() => setType('KAG_ONLY')}
               >
-                🎯 KAGのみ
+                📱 KAGのみ
               </button>
               <button
                 type="button"

@@ -194,7 +194,7 @@ function App() {
                               : 'bg-secondary-500 text-white'
                           }`}
                         >
-                          {member.group === 'NAiS' ? '🚀' : '🎯'} {member.group}
+                          {member.group === 'NAiS' ? '🍺' : '📱'} {member.group}
                         </span>
                       </li>
                     ))}

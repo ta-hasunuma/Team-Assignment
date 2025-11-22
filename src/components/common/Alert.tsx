@@ -17,7 +17,7 @@ export function Alert({ type, message, className = '' }: AlertProps) {
 
   return (
     <div
-      className={`alert ${alertClass} ${className}`}
+      className={`alert ${alertClass} ${className} animate-slide-in`}
       role="alert"
       data-testid="alert"
     >

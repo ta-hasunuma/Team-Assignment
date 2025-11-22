@@ -15,7 +15,7 @@ export function TeamConfig({ totalTeams, onUpdate }: TeamConfigProps) {
   };
 
   return (
-    <div className="form-control" data-testid="team-config">
+    <div className="form-control animate-fade-in" data-testid="team-config">
       <label className="label" htmlFor="total-teams">
         <span className="label-text font-semibold">全体のWIP数</span>
       </label>
@@ -24,7 +24,7 @@ export function TeamConfig({ totalTeams, onUpdate }: TeamConfigProps) {
         type="number"
         min="1"
         max="20"
-        className="input input-bordered"
+        className="input input-bordered focus:ring-primary focus:ring-opacity-50 transition-all focus:ring"
         value={totalTeams}
         onChange={handleChange}
         data-testid="total-teams-input"

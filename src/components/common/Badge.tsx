@@ -12,7 +12,10 @@ export function Badge({ group, className = '' }: BadgeProps) {
   const colorClass = group === 'NAiS' ? 'badge-primary' : 'badge-secondary';
 
   return (
-    <span className={`badge ${colorClass} ${className}`} data-testid="badge">
+    <span
+      className={`badge ${colorClass} ${className} transition-transform hover:scale-105`}
+      data-testid="badge"
+    >
       {group}
     </span>
   );

@@ -119,8 +119,8 @@ describe('Initial Data', () => {
   });
 
   describe('DEFAULT_TEAM_COUNT', () => {
-    it('should be 3', () => {
-      expect(DEFAULT_TEAM_COUNT).toBe(3);
+    it('should be 4', () => {
+      expect(DEFAULT_TEAM_COUNT).toBe(4);
     });
   });
 });

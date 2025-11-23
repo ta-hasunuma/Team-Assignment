@@ -102,7 +102,7 @@ export function PatternRuleList({
       )}
 
       {/* ルール追加フォーム */}
-      <details className="rounded-lg bg-gray-50 shadow-sm" open>
+      <details className="rounded-lg bg-gray-50 shadow-sm">
         <summary className="flex cursor-pointer items-center gap-2 p-4 font-medium">
           <Plus size={18} />
           新しいルールを追加

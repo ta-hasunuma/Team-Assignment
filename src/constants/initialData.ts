@@ -39,7 +39,7 @@ export const INITIAL_MEMBERS: Member[] = [
 /**
  * デフォルトのチーム数
  */
-export const DEFAULT_TEAM_COUNT = 3;
+export const DEFAULT_TEAM_COUNT = 4;
 
 /**
  * チーム名のプレフィックス

@@ -30,30 +30,28 @@ function App() {
 
   const validation = useValidation(members, config);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const [copyingTeamId, setCopyingTeamId] = useState<string | null>(null);
+  const teamsGridRef = useRef<HTMLDivElement>(null);
+  const [isCopyingAll, setIsCopyingAll] = useState(false);
 
-  const handleCopyTeamAsImage = async (teamId: string) => {
-    const teamElement = document.querySelector(
-      `[data-testid="team-card-${teamId}"]`
-    ) as HTMLElement;
-    if (!teamElement) return;
+  const handleCopyAllTeamsAsImage = async () => {
+    if (!teamsGridRef.current) return;
 
     try {
-      setCopyingTeamId(teamId);
-      const dataUrl = await htmlToImage.toPng(teamElement, {
+      setIsCopyingAll(true);
+      const dataUrl = await htmlToImage.toPng(teamsGridRef.current, {
         cacheBust: true,
         pixelRatio: 2,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f9fafb',
       });
 
       const blob = await (await fetch(dataUrl)).blob();
       await navigator.clipboard.write([
         new ClipboardItem({ 'image/png': blob }),
       ]);
-      setTimeout(() => setCopyingTeamId(null), 1000);
+      setTimeout(() => setIsCopyingAll(false), 1000);
     } catch (error) {
       console.error('Failed to copy image:', error);
-      setCopyingTeamId(null);
+      setIsCopyingAll(false);
     }
   };
 
@@ -212,29 +210,71 @@ function App() {
               <p className="mb-4 text-gray-600">
                 {teams.length}つのチームが作成されました
               </p>
-              <button
-                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm transition-colors hover:bg-gray-50"
-                onClick={clearTeams}
-                data-testid="clear-teams-button"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              <div className="flex items-center justify-center gap-3">
+                <button
+                  className="inline-flex items-center gap-2 rounded-lg border-2 border-primary-500 bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={handleCopyAllTeamsAsImage}
+                  disabled={isCopyingAll}
+                  data-testid="copy-all-teams-button"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-                結果をクリア
-              </button>
+                  {isCopyingAll ? (
+                    <>
+                      <svg
+                        className="h-4 w-4 animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span>コピー中...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={16} />
+                      <span>画像としてコピー</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm transition-colors hover:bg-gray-50"
+                  onClick={clearTeams}
+                  data-testid="clear-teams-button"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  結果をクリア
+                </button>
+              </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div
+              ref={teamsGridRef}
+              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+            >
               {teams.map((team, index) => (
                 <div
                   key={team.id}
@@ -244,47 +284,8 @@ function App() {
                 >
                   <div className="mb-2 flex items-center justify-between">
                     <h3 className="text-2xl font-bold">{team.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleCopyTeamAsImage(team.id)}
-                        className="flex items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200"
-                        title="画像としてコピー"
-                        data-testid={`copy-team-button-${team.id}`}
-                      >
-                        {copyingTeamId === team.id ? (
-                          <>
-                            <svg
-                              className="h-3 w-3 animate-spin"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                            <span>コピー中</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={14} />
-                            <span>画像コピー</span>
-                          </>
-                        )}
-                      </button>
-                      <div className="inline-flex items-center rounded-full bg-primary-500 px-3 py-1 text-sm font-semibold text-white">
-                        {team.members.length}人
-                      </div>
+                    <div className="inline-flex items-center rounded-full bg-primary-500 px-3 py-1 text-sm font-semibold text-white">
+                      {team.members.length}人
                     </div>
                   </div>
                   <div className="my-3 border-t border-gray-200"></div>

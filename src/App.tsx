@@ -71,7 +71,7 @@ function App() {
         });
       }, 100);
     }
-  }, [teams.length]);
+  }, [teams]);
 
   return (
     <div

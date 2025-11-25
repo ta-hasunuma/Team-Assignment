@@ -20,7 +20,6 @@ function App() {
     error,
     addMember,
     removeMember,
-    resetMembers,
     updateConfig,
     addPatternRule,
     removePatternRule,
@@ -85,11 +84,7 @@ function App() {
           {/* 左カラム: メンバー管理 */}
           <div className="space-y-6">
             <MemberInput onAdd={addMember} />
-            <MemberList
-              members={members}
-              onRemove={removeMember}
-              onReset={resetMembers}
-            />
+            <MemberList members={members} onRemove={removeMember} />
           </div>
 
           {/* 右カラム: チーム設定 */}

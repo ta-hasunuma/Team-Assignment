@@ -1,17 +1,16 @@
-import { X, Users, Trash2 } from 'lucide-react';
+import { X, Users } from 'lucide-react';
 import type { Member } from '@/types';
 import { Badge } from '@/components/common/Badge';
 
 interface MemberListProps {
   members: Member[];
   onRemove: (memberId: string) => void;
-  onReset: () => void;
 }
 
 /**
  * メンバー一覧表示コンポーネント
  */
-export function MemberList({ members, onRemove, onReset }: MemberListProps) {
+export function MemberList({ members, onRemove }: MemberListProps) {
   const naisCount = members.filter((m) => m.group === 'NAiS').length;
   const kagCount = members.filter((m) => m.group === 'KAG').length;
 
@@ -20,21 +19,11 @@ export function MemberList({ members, onRemove, onReset }: MemberListProps) {
       className="fade-in-section rounded-xl border border-gray-200 bg-white p-6 shadow-xl"
       data-testid="member-list"
     >
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4">
         <h2 className="flex items-center gap-2 text-xl font-bold">
           <Users size={24} className="text-primary-500" />
           メンバー一覧
         </h2>
-        {members.length > 0 && (
-          <button
-            className="flex items-center gap-1 rounded-lg border border-red-500 px-3 py-1 text-sm text-red-500 transition-colors hover:bg-red-50"
-            onClick={onReset}
-            data-testid="reset-button"
-          >
-            <Trash2 size={16} />
-            全削除
-          </button>
-        )}
       </div>
 
       {/* Stats */}

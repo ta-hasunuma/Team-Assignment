@@ -13,11 +13,8 @@ describe('MemberList', () => {
 
   it('メンバー一覧が表示される', () => {
     const onRemove = vi.fn();
-    const onReset = vi.fn();
 
-    render(
-      <MemberList members={mockMembers} onRemove={onRemove} onReset={onReset} />
-    );
+    render(<MemberList members={mockMembers} onRemove={onRemove} />);
 
     expect(screen.getByTestId('member-list')).toBeInTheDocument();
     expect(screen.getByText('メンバー一覧')).toBeInTheDocument();
@@ -25,11 +22,8 @@ describe('MemberList', () => {
 
   it('各メンバーが正しく表示される', () => {
     const onRemove = vi.fn();
-    const onReset = vi.fn();
 
-    render(
-      <MemberList members={mockMembers} onRemove={onRemove} onReset={onReset} />
-    );
+    render(<MemberList members={mockMembers} onRemove={onRemove} />);
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
@@ -38,9 +32,8 @@ describe('MemberList', () => {
 
   it('メンバーが0人の場合、空メッセージが表示される', () => {
     const onRemove = vi.fn();
-    const onReset = vi.fn();
 
-    render(<MemberList members={[]} onRemove={onRemove} onReset={onReset} />);
+    render(<MemberList members={[]} onRemove={onRemove} />);
 
     // statsが表示されるが、0人の時は表示されない
     expect(
@@ -51,11 +44,8 @@ describe('MemberList', () => {
   it('削除ボタンをクリックするとonRemoveが呼ばれる', async () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
-    const onReset = vi.fn();
 
-    render(
-      <MemberList members={mockMembers} onRemove={onRemove} onReset={onReset} />
-    );
+    render(<MemberList members={mockMembers} onRemove={onRemove} />);
 
     const removeButton = screen.getByTestId('remove-button-1');
     await user.click(removeButton);
@@ -64,28 +54,10 @@ describe('MemberList', () => {
     expect(onRemove).toHaveBeenCalledTimes(1);
   });
 
-  it('リセットボタンをクリックするとonResetが呼ばれる', async () => {
-    const user = userEvent.setup();
-    const onRemove = vi.fn();
-    const onReset = vi.fn();
-
-    render(
-      <MemberList members={mockMembers} onRemove={onRemove} onReset={onReset} />
-    );
-
-    const resetButton = screen.getByTestId('reset-button');
-    await user.click(resetButton);
-
-    expect(onReset).toHaveBeenCalledTimes(1);
-  });
-
   it('削除ボタンに適切なaria-labelが設定されている', () => {
     const onRemove = vi.fn();
-    const onReset = vi.fn();
 
-    render(
-      <MemberList members={mockMembers} onRemove={onRemove} onReset={onReset} />
-    );
+    render(<MemberList members={mockMembers} onRemove={onRemove} />);
 
     const removeButton = screen.getByLabelText('Aliceを削除');
     expect(removeButton).toBeInTheDocument();

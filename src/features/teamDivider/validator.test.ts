@@ -211,7 +211,7 @@ describe('validateConfig', () => {
   });
 
   describe('混合タイプのルール', () => {
-    it('MIXEDタイプのルールはメンバー数チェックをスキップ', () => {
+    it('MIXEDタイプで両グループのメンバーが十分な場合は正常', () => {
       const members = createMockMembers(5, 5);
       const config: TeamConfig = {
         totalTeams: 3,
@@ -228,6 +228,79 @@ describe('validateConfig', () => {
       const result = validateConfig(members, config);
 
       expect(result.isValid).toBe(true);
+    });
+
+    it('MIXEDタイプでNAiSメンバーが不足している場合はエラー', () => {
+      const members = createMockMembers(1, 5); // NAiS: 1名, KAG: 5名
+      const config: TeamConfig = {
+        totalTeams: 3,
+        rules: [
+          {
+            id: 'rule-1',
+            type: 'MIXED',
+            teamCount: 2, // 2チーム必要 = NAiS最低2名必要
+            membersPerTeam: 3,
+          },
+        ],
+      };
+
+      const result = validateConfig(members, config);
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0].field).toBe('rules');
+      expect(result.errors[0].message).toContain(
+        '混合チーム用のNAiSメンバーが足りません'
+      );
+    });
+
+    it('MIXEDタイプでKAGメンバーが不足している場合はエラー', () => {
+      const members = createMockMembers(5, 1); // NAiS: 5名, KAG: 1名
+      const config: TeamConfig = {
+        totalTeams: 3,
+        rules: [
+          {
+            id: 'rule-1',
+            type: 'MIXED',
+            teamCount: 2, // 2チーム必要 = KAG最低2名必要
+            membersPerTeam: 3,
+          },
+        ],
+      };
+
+      const result = validateConfig(members, config);
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0].field).toBe('rules');
+      expect(result.errors[0].message).toContain(
+        '混合チーム用のKAGメンバーが足りません'
+      );
+    });
+
+    it('MIXEDタイプで全体のメンバー数が不足している場合はエラー', () => {
+      const members = createMockMembers(2, 2); // 合計4名
+      const config: TeamConfig = {
+        totalTeams: 3,
+        rules: [
+          {
+            id: 'rule-1',
+            type: 'MIXED',
+            teamCount: 2,
+            membersPerTeam: 4, // 2チーム × 4名 = 8名必要
+          },
+        ],
+      };
+
+      const result = validateConfig(members, config);
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(
+        result.errors.some((e) =>
+          e.message.includes('混合チーム用のメンバーが足りません')
+        )
+      ).toBe(true);
     });
   });
 });

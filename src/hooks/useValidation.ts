@@ -52,8 +52,25 @@ export function useValidation(
         requiredNaisMembers += totalMembersForRule;
       } else if (rule.type === 'KAG_ONLY') {
         requiredKagMembers += totalMembersForRule;
+      } else if (rule.type === 'MIXED') {
+        // MIXEDの場合、両グループから最低1名ずつ必要
+        // 各チームにNAiSとKAGが少なくとも1名ずつ必要
+        const teamsInRule = rule.teamCount;
+        requiredNaisMembers += teamsInRule; // 各チームに最低1名のNAiS
+        requiredKagMembers += teamsInRule; // 各チームに最低1名のKAG
+
+        // 残りのメンバー数は両グループ合計で確保できればOK
+        const remainingMembers = totalMembersForRule - teamsInRule * 2;
+        if (remainingMembers > 0) {
+          // 両グループ合計で残りのメンバーが確保できるかチェック
+          const totalAvailableMembers = naisMembers.length + kagMembers.length;
+          if (totalAvailableMembers < totalMembersForRule) {
+            errors.push(
+              `混合チーム用のメンバーが不足しています（必要: ${totalMembersForRule}名、現在: ${totalAvailableMembers}名）`
+            );
+          }
+        }
       }
-      // MIXEDの場合は特定のグループに制約なし
     });
 
     // NAiSメンバー不足チェック

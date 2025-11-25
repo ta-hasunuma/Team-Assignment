@@ -104,6 +104,84 @@ describe('useValidation', () => {
     });
   });
 
+  describe('混合チームのメンバー不足のチェック', () => {
+    it('混合チームでNAiSメンバーが不足している場合、エラーを返す', () => {
+      const members = [
+        createMember('1', 'Alice', 'NAiS'),
+        createMember('2', 'Bob', 'KAG'),
+        createMember('3', 'Charlie', 'KAG'),
+        createMember('4', 'David', 'KAG'),
+      ];
+      const config: TeamConfig = {
+        totalTeams: 2,
+        rules: [
+          {
+            id: 'rule1',
+            type: 'MIXED',
+            teamCount: 2,
+            membersPerTeam: 3,
+          },
+        ],
+      };
+      const { result } = renderHook(() => useValidation(members, config));
+
+      expect(result.current.isValid).toBe(false);
+      expect(
+        result.current.errors.some((e) => e.includes('NAiSメンバー'))
+      ).toBe(true);
+    });
+
+    it('混合チームでKAGメンバーが不足している場合、エラーを返す', () => {
+      const members = [
+        createMember('1', 'Alice', 'NAiS'),
+        createMember('2', 'Bob', 'NAiS'),
+        createMember('3', 'Charlie', 'NAiS'),
+        createMember('4', 'David', 'KAG'),
+      ];
+      const config: TeamConfig = {
+        totalTeams: 2,
+        rules: [
+          {
+            id: 'rule1',
+            type: 'MIXED',
+            teamCount: 2,
+            membersPerTeam: 3,
+          },
+        ],
+      };
+      const { result } = renderHook(() => useValidation(members, config));
+
+      expect(result.current.isValid).toBe(false);
+      expect(result.current.errors.some((e) => e.includes('KAGメンバー'))).toBe(
+        true
+      );
+    });
+
+    it('混合チームで全体のメンバー数が不足している場合、エラーを返す', () => {
+      const members = [
+        createMember('1', 'Alice', 'NAiS'),
+        createMember('2', 'Bob', 'KAG'),
+      ];
+      const config: TeamConfig = {
+        totalTeams: 2,
+        rules: [
+          {
+            id: 'rule1',
+            type: 'MIXED',
+            teamCount: 2,
+            membersPerTeam: 3,
+          },
+        ],
+      };
+      const { result } = renderHook(() => useValidation(members, config));
+
+      expect(result.current.isValid).toBe(false);
+      expect(
+        result.current.errors.some((e) => e.includes('メンバーが不足'))
+      ).toBe(true);
+    });
+  });
+
   describe('パターンルールのチーム数チェック', () => {
     it('パターン制約のチーム数合計が全体のWIP数を超える場合、エラーを返す', () => {
       const members = Array.from({ length: 10 }, (_, i) =>

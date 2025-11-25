@@ -59,7 +59,33 @@ export function validateConfig(
       });
     }
 
-    // MIXEDタイプはメンバー数チェックをスキップ
+    if (rule.type === 'MIXED') {
+      // 混合チームの場合、各チームに両グループから最低1名ずつ必要
+      const teamsInRule = rule.teamCount;
+
+      if (teamsInRule > naisCount) {
+        errors.push({
+          field: 'rules',
+          message: `混合チーム用のNAiSメンバーが足りません（必要: 最低${teamsInRule}名、現在: ${naisCount}名）`,
+        });
+      }
+
+      if (teamsInRule > kagCount) {
+        errors.push({
+          field: 'rules',
+          message: `混合チーム用のKAGメンバーが足りません（必要: 最低${teamsInRule}名、現在: ${kagCount}名）`,
+        });
+      }
+
+      // 全体のメンバー数チェック
+      const totalAvailable = naisCount + kagCount;
+      if (requiredMembers > totalAvailable) {
+        errors.push({
+          field: 'rules',
+          message: `混合チーム用のメンバーが足りません（必要: ${requiredMembers}名、現在: ${totalAvailable}名）`,
+        });
+      }
+    }
   }
 
   return {
